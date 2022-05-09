@@ -1,6 +1,8 @@
 from django.db import models
 from datetime import date
 
+from django.urls import reverse
+
 
 class Category(models.Model):
     name = models.CharField(max_length=150)
@@ -27,6 +29,7 @@ class Actor(models.Model):
     class Meta:
         verbose_name = "Актори та режисери"
         verbose_name_plural = "Актори та режисери"
+        ordering = ['name']
 
 
 class Genre(models.Model):
@@ -62,47 +65,16 @@ class Movie(models.Model):
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse('movie_detail', kwargs={'slug': self.url})
+
+    def get_review(self):
+        return self.reviews_set.filter(parent__isnull=True)[::-1]
+
     class Meta:
         verbose_name = "Фільм"
         verbose_name_plural = "Фільми"
-
-
-class MovieShots(models.Model):
-    title = models.CharField(max_length=100)
-    description = models.TextField()
-    image = models.ImageField(upload_to="movie_shots")
-    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.title
-
-    class Meta:
-        verbose_name = "Кадр з фільму"
-        verbose_name_plural = "Кадри з фільму"
-
-
-class RatingStar(models.Model):
-    value = models.PositiveSmallIntegerField(default=0)
-
-    def __str__(self):
-        return self.value
-
-    class Meta:
-        verbose_name = "Зірка"
-        verbose_name_plural = "Зірки"
-
-
-class Rating(models.Model):
-    ip = models.CharField(max_length=15)
-    star = models.ForeignKey(RatingStar, on_delete=models.CASCADE)
-    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f"{self.star} - {self.movie}"
-
-    class Meta:
-        verbose_name = "Рейтинг"
-        verbose_name_plural = "Рейтинги"
+        ordering = ['title']
 
 
 class Reviews(models.Model):
