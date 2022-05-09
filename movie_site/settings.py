@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +21,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-%p%+2k3eair)p89p1vs!*+p401l8ic&#r9#=0j4hxu=s&&0j-a'
+SECRET_KEY = config("SECRET_KEY")
+API_KEY = config("API_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -142,4 +144,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ORIGIN_ALLOW_ALL = True
 
 LOGOUT_REDIRECT_URL = '/'
-API_KEY = 'AIzaSyCmsuyjGOV8VNHsMHuxq_WBDkyAj5a1LyM'
